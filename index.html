@@ -1,113 +1,621 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Task 3: Read/Display JSON</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps, Music & Art API Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-<style type="text/css">
-    body, html {
-        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        font-size: 18px;
-        padding: 20px;
-        background-color: #e0bbff;
-    }
-    
-    h1 {
-        color: #4b187b;
-        text-align: center;
-    }
-    
-    button {
-        background-color: #4b187b;
-        color: #fdb927;
-        padding: 12px 24px;
-        font-size: 18px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 20px;
-    }
-    
-    button:hover {
-        background-color: #fdb927;
-        color: #4b187b;
-    }
-    
-    #result {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .product {
-        border-bottom: 2px solid #eee;
-        padding: 15px 0;
-        margin-bottom: 15px;
-    }
-    
-    .product:last-child {
-        border-bottom: none;
-    }
-    
-    .product-name {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 8px;
-    }
-    
-    .product-description {
-        color: #666;
-        margin-bottom: 8px;
-    }
-    
-    .product-price {
-        color: #4b187b;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-    
-    .product-categories {
-        color: #888;
-        font-style: italic;
-    }
-</style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .icon {
+            font-size: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .map-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .music-button {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .art-button {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #fa709a;
+        }
+
+        .map-container {
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .map-info {
+            background: linear-gradient(135deg, #e0f7ff 0%, #f0e7ff 100%);
+            padding: 20px;
+        }
+
+        .map-info p {
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .map-info strong {
+            color: #667eea;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card p {
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .card-button {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+            color: white;
+        }
+
+        .preview-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .link-btn {
+            background: #333;
+        }
+
+        .card-button:hover {
+            opacity: 0.8;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            border-left: 5px solid #f44;
+            padding: 20px;
+            border-radius: 10px;
+            color: #c33;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e0f7ff 0%, #f0e7ff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .art-card {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe0e6 100%);
+        }
+
+        .art-card img {
+            height: 300px;
+            object-fit: contain;
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Product List Display</h1>
+    <div class="container">
+        <h1>🗺️ Maps · 🎵 Music · 🎨 Art API Explorer</h1>
 
-    <button onclick="loadProducts()">Load Products</button>
-    
-    <div id="result">&nbsp;</div>
+        <!-- MAPS SECTION -->
+        <div class="section">
+            <div class="section-header">
+                <span class="icon">🗺️</span>
+                <h2>Interactive Maps</h2>
+            </div>
 
-    <script language="javascript">
-        function loadProducts() {
-            $.get("/products.json", function(data) {
-                console.log('Loaded products:', data);
+            <div class="button-group">
+                <button class="map-button" onclick="changeLocation('Boston', 42.3601, -71.0589)">📍 Boston</button>
+                <button class="map-button" onclick="changeLocation('New York', 40.7128, -74.0060)">📍 New York</button>
+                <button class="map-button" onclick="changeLocation('Paris', 48.8566, 2.3522)">📍 Paris</button>
+                <button class="map-button" onclick="changeLocation('Tokyo', 35.6762, 139.6503)">📍 Tokyo</button>
+                <button class="map-button" onclick="changeLocation('Sydney', -33.8688, 151.2093)">📍 Sydney</button>
+                <button class="map-button" onclick="changeLocation('Addis Ababa', 9.0336, 38.7222)">📍Addis Ababa</button>
+                <button class="map-button" onclick="changeLocation('Kiev', 50.4501, 30.5234)">📍Kiev</button>
+                <button class="map-button" onclick="changeLocation('Gaza', 31.5017, 34.4668 )">📍Gaza</button>
+                <button class="map-button" onclick="changeLocation('Cairo', 30.0444, 31.2357)">📍Cairo</button>
+            </div>
+
+            <div class="map-container">
+                <iframe
+                    id="mapFrame"
+                    width="100%"
+                    height="500"
+                    style="border: 0;"
+                    loading="lazy"
+                    allowfullscreen
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-71.1097%2C42.3201%2C-71.0089%2C42.4001&layer=mapnik&marker=42.3601%2C-71.0589"
+                ></iframe>
+                <div class="map-info">
+                    <p><strong>Current Location:</strong> <span id="currentLocation">Boston</span></p>
+                    <p><strong>🗺️ API Used:</strong> OpenStreetMap Embed API - Completely free, no API key required</p>
+                    <p><strong>Features:</strong> Beautiful maps with detailed street data, landmarks, and geographic features</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>🌍 About OpenStreetMap API</h3>
+                <p>
+                    <strong>OpenStreetMap</strong> is a collaborative project that creates a free, editable map of the world. 
+                    100% free to use with no API key required!
+                </p>
+                <p><strong>API Endpoint:</strong> https://www.openstreetmap.org/export/embed.html</p>
+            </div>
+        </div>
+
+        <!-- MUSIC SECTION -->
+        <div class="section">
+            <div class="section-header">
+                <span class="icon">🎵</span>
+                <h2>Music Discovery (Deezer API)</h2>
+            </div>
+
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search for songs or artists..."
+                    onkeypress="if(event.key==='Enter') searchMusic()"
+                >
+                <button class="music-button" onclick="searchMusic()">🔍 Search</button>
+            </div>
+
+            <div class="button-group">
+                <button class="music-button" onclick="fetchMusic('drake')">🔥 Drake</button>
+                <button class="music-button" onclick="fetchMusic('the weeknd')">🎤 The Weeknd</button>
+                <button class="music-button" onclick="fetchMusic('taylor swift')">✨ Taylor Swift</button>
+                <button class="music-button" onclick="fetchMusic('bad bunny')">🐰 Bad Bunny</button>
+                <button class="music-button" onclick="fetchMusic('coldplay')">🌟 Coldplay</button>
+            </div>
+
+            <div id="musicResults">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎵</div>
+                    <p style="font-size: 1.2rem;">Search for music or click an artist button to get started!</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>🎵 About Deezer API</h3>
+                <p>
+                    <strong>Deezer API</strong> is completely FREE with no API key required! 
+                    Access millions of songs with album art, 30-second previews, and artist information.
+                </p>
+                <p><strong>API Endpoint:</strong> https://api.deezer.com/search</p>
+                <p><strong>Features:</strong> Free music previews, album artwork, artist info - no authentication needed!</p>
+            </div>
+        </div>
+
+        <!-- ART SECTION -->
+        <div class="section">
+            <div class="section-header">
+                <span class="icon">🎨</span>
+                <h2>Art Gallery (Met Museum API)</h2>
+            </div>
+
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="artSearchInput" 
+                    class="search-input" 
+                    placeholder="Search for paintings, artists, or art movements..."
+                    onkeypress="if(event.key==='Enter') searchArt()"
+                >
+                <button class="art-button" onclick="searchArt()">🔍 Search Art</button>
+            </div>
+
+            <div class="button-group">
+                <button class="art-button" onclick="fetchArt('van gogh')">🌻 Van Gogh</button>
+                <button class="art-button" onclick="fetchArt('contemporary')">🎨 Contemporary Art</button>
+                <button class="art-button" onclick="fetchArt('asian')">Asian</button>
+                <button class="art-button" onclick="fetchArt('Ethiopia')">Ethiopian</button>
+                <button class="art-button" onclick="fetchArt('Christian')">Christian</button>
+                <button class="art-button" onclick="fetchArt('rembrandt')">🖼️ Rembrandt</button>
+                <button class="art-button" onclick="fetchArt('impressionism')">🎭 Impressionism</button>
+                 <button class="art-button" onclick="fetchArt('Egypt')">Egyptian</button>
+            </div>
+
+            <div id="artResults">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎨</div>
+                    <p style="font-size: 1.2rem;">Search for art or click an artist to explore masterpieces!</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>🎨 About Metropolitan Museum of Art API</h3>
+                <p>
+                    <strong>The Met Museum API</strong> provides access to over 470,000 artworks from one of the world's largest museums. 
+                    Completely FREE with no API key required!
+                </p>
+                <p><strong>API Endpoint:</strong> https://collectionapi.metmuseum.org/public/collection/v1</p>
+                <p><strong>Features:</strong> High-resolution images, artwork details, artist information, historical context</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MAPS FUNCTIONS
+        function changeLocation(name, lat, lon) {
+            document.getElementById('currentLocation').textContent = name;
+            const bbox = `${lon - 0.05},${lat - 0.02},${lon + 0.05},${lat + 0.02}`;
+            const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
+            document.getElementById('mapFrame').src = mapUrl;
+        }
+
+        // MUSIC FUNCTIONS
+        function searchMusic() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                fetchMusic(query);
+            }
+        }
+
+        async function fetchMusic(query) {
+            const resultsDiv = document.getElementById('musicResults');
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p style="font-size: 1.2rem;">Loading music from Deezer API...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=12`);
+                const data = await response.json();
+                
+                if (data.data && data.data.length > 0) {
+                    displayMusic(data.data, query);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <p style="font-size: 1.2rem;">No results found for "${query}"</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error"><strong>Error!</strong> ${error.message}</div>`;
+            }
+        }
+
+        function displayMusic(songs, query) {
+            const resultsDiv = document.getElementById('musicResults');
+            let html = `<h3 style="margin-bottom: 20px; color: #333; font-size: 1.5rem;">Found ${songs.length} songs for "${query}"</h3>`;
+            html += '<div class="grid">';
             
-                let html = "";
-                
-                data.forEach(function(product) {
-                    html += "<div class='product'>";
-                    html += "<div class='product-name'>" + product.name + "</div>";
-                    html += "<div class='product-description'>" + product.description + "</div>";
-                    html += "<div class='product-price'>Price: $" + product.price + "</div>";
-                    html += "<div class='product-categories'>Categories: " + product.categories.join(", ") + "</div>";
-                    html += "</div>";
-                });
-                
-                // Display in the "result" div using innerHTML
-                document.getElementById('result').innerHTML = html;
-            })
-            .fail(function() {
-                document.getElementById('result').innerHTML = 
-                    "<p style='color: red;'>Error loading products.json. Make sure the file is in the same folder!</p>";
+            songs.forEach(song => {
+                html += `
+                    <div class="card">
+                        <img src="${song.album.cover_big}" alt="${song.title}">
+                        <h3 title="${song.title}">${song.title}</h3>
+                        <p><strong>Artist:</strong> ${song.artist.name}</p>
+                        <p><strong>Album:</strong> ${song.album.title}</p>
+                        <p><strong>Duration:</strong> ${Math.floor(song.duration / 60)}:${(song.duration % 60).toString().padStart(2, '0')}</p>
+                        <div class="card-buttons">
+                            <a href="${song.preview}" target="_blank" class="card-button preview-btn">
+                                ▶️ Preview
+                            </a>
+                            <a href="${song.link}" target="_blank" class="card-button link-btn">
+                                Deezer
+                            </a>
+                        </div>
+                    </div>
+                `;
             });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        // ART FUNCTIONS
+        function searchArt() {
+            const query = document.getElementById('artSearchInput').value.trim();
+            if (query) {
+                fetchArt(query);
+            }
+        }
+
+        async function fetchArt(query) {
+            const resultsDiv = document.getElementById('artResults');
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p style="font-size: 1.2rem;">Searching Metropolitan Museum collection...</p>
+                </div>
+            `;
+
+            try {
+                // First, search for object IDs
+                const searchResponse = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${encodeURIComponent(query)}`);
+                const searchData = await searchResponse.json();
+                
+                if (searchData.objectIDs && searchData.objectIDs.length > 0) {
+                    // Get first 12 objects
+                    const objectIDs = searchData.objectIDs.slice(0, 12);
+                    const artworks = [];
+                    
+                    // Fetch details for each artwork
+                    for (let id of objectIDs) {
+                        try {
+                            const detailResponse = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`);
+                            const artwork = await detailResponse.json();
+                            if (artwork.primaryImage) {
+                                artworks.push(artwork);
+                            }
+                        } catch (err) {
+                            console.log('Error fetching artwork:', err);
+                        }
+                    }
+                    
+                    if (artworks.length > 0) {
+                        displayArt(artworks, query);
+                    } else {
+                        resultsDiv.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🔍</div>
+                                <p style="font-size: 1.2rem;">No artworks with images found for "${query}"</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <p style="font-size: 1.2rem;">No results found for "${query}"</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error"><strong>Error!</strong> ${error.message}</div>`;
+            }
+        }
+
+        function displayArt(artworks, query) {
+            const resultsDiv = document.getElementById('artResults');
+            let html = `<h3 style="margin-bottom: 20px; color: #333; font-size: 1.5rem;">Found ${artworks.length} artworks for "${query}"</h3>`;
+            html += '<div class="grid">';
+            
+            artworks.forEach(art => {
+                const artist = art.artistDisplayName || 'Unknown Artist';
+                const date = art.objectDate || 'Date unknown';
+                const culture = art.culture || art.department || 'Various';
+                
+                html += `
+                    <div class="card art-card">
+                        <img src="${art.primaryImageSmall}" alt="${art.title}">
+                        <h3 title="${art.title}">${art.title || 'Untitled'}</h3>
+                        <p><strong>Artist:</strong> ${artist}</p>
+                        <p><strong>Date:</strong> ${date}</p>
+                        <p><strong>Culture:</strong> ${culture}</p>
+                        <p><strong>Medium:</strong> ${art.medium || 'N/A'}</p>
+                        <div class="card-buttons">
+                            <a href="${art.objectURL}" target="_blank" class="card-button link-btn" style="flex: 1;">
+                                View at Met Museum
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
         }
     </script>
 </body>

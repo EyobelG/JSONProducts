@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 4: Filter Products</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 18px;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .controls {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        button {
+            background-color:#4b187b;
+            color: #fdb927;
+            padding: 10px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #fdb927;
+            color: #4b187b;
+        }
+
+        #result {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 100px;
+        }
+
+        .product-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4CAF50;
+            background-color: #f9f9f9;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .no-results {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Filter</h1>
+    
+    <div class="controls">
+        <label for="categorySelect">Select Category:</label>
+        <select id="categorySelect">
+            <option value="">-- Choose a category --</option>
+        </select>
+        
+        <button onclick="filterProducts()">Filter</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        let productsData = []; // Store all products globally
+
+        // Load products and populate dropdown when page loads
+        $(document).ready(function() {
+            $.get("products.json", function(data) {
+                productsData = data;
+                populateCategories(data);
+                document.getElementById('result').innerHTML = 
+                    '<p class="no-results">Select a category and click Filter to see products.</p>';
+            })
+            .fail(function() {
+                document.getElementById('result').innerHTML = 
+                    '<p style="color: red;">Error loading products.json. Make sure the file is in the same folder!</p>';
+            });
+        });
+
+        // Extract all unique categories from products and populate dropdown
+        function populateCategories(products) {
+            let allCategories = [];
+            
+            // Collect all categories from all products
+            products.forEach(function(product) {
+                product.categories.forEach(function(category) {
+                    if (!allCategories.includes(category)) {
+                        allCategories.push(category);
+                    }
+                });
+            });
+
+            // Sort categories alphabetically
+            allCategories.sort();
+
+            // Add categories to dropdown
+            let select = document.getElementById('categorySelect');
+            allCategories.forEach(function(category) {
+                let option = document.createElement('option');
+                option.value = category;
+                option.text = category;
+                select.appendChild(option);
+            });
+        }
+
+        // Filter and display products based on selected category
+        function filterProducts() {
+            let selectedCategory = document.getElementById('categorySelect').value;
+            
+            if (!selectedCategory) {
+                document.getElementById('result').innerHTML = 
+                    '<p class="no-results">Please select a category first!</p>';
+                return;
+            }
+
+            // Filter products that have the selected category
+            let filteredProducts = productsData.filter(function(product) {
+                return product.categories.includes(selectedCategory);
+            });
+
+            // Display filtered products
+            if (filteredProducts.length === 0) {
+                document.getElementById('result').innerHTML = 
+                    '<p class="no-results">No products found in this category.</p>';
+            } else {
+                let html = '<h2>Products in "' + selectedCategory + '" category:</h2>';
+                
+                filteredProducts.forEach(function(product) {
+                    html += '<div class="product-item">';
+                    html += '<div class="product-name">' + product.name + '</div>';
+                    html += '</div>';
+                });
+                
+                document.getElementById('result').innerHTML = html;
+            }
+        }
+    </script>
+</body>
+</html>
