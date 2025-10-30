@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: green;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,7 +25,7 @@
 
         h1 {
             text-align: center;
-            color: white;
+            color: goldenrod;
             font-size: 3rem;
             margin-bottom: 40px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
@@ -63,7 +63,7 @@
         }
 
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: greenyellow;
             color: white;
             border: none;
             padding: 15px 30px;
@@ -84,15 +84,15 @@
         }
 
         .map-button {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: green;
         }
 
         .meme-button {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            background: green;
         }
 
         .art-button {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background: green;
         }
 
         .search-container {
@@ -123,7 +123,7 @@
         }
 
         .map-info {
-            background: linear-gradient(135deg, #e0f7ff 0%, #f0e7ff 100%);
+            background: limegreen;
             padding: 20px;
         }
 
@@ -134,7 +134,7 @@
         }
 
         .map-info strong {
-            color: #667eea;
+            color: blueviolet;
         }
 
         .grid {
@@ -145,8 +145,7 @@
         }
 
         .card {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            border-radius: 15px;
+            background: limegreen;
             padding: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
@@ -169,7 +168,7 @@
         }
 
         .meme-card {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffebcd 100%);
+            background: limegreen;
         }
 
         .card h3 {
@@ -237,7 +236,7 @@
         }
 
         .info-box {
-            background: linear-gradient(135deg, #e0f7ff 0%, #f0e7ff 100%);
+            background: lightgreen;
             padding: 25px;
             border-radius: 15px;
             margin-top: 30px;
@@ -268,7 +267,7 @@
         }
 
         .art-card {
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe0e6 100%);
+            background: lightgreen;
         }
 
         .art-card img {
@@ -306,7 +305,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🗺️ Maps · 😂 Memes · 🎨 Art API Explorer</h1>
+        <h1>Maps, Memes, and Art API Explorer</h1>
 
         <!-- MAPS SECTION -->
         <div class="section">
@@ -321,6 +320,10 @@
                 <button class="map-button" onclick="changeLocation('Paris', 48.8566, 2.3522)">📍 Paris</button>
                 <button class="map-button" onclick="changeLocation('Tokyo', 35.6762, 139.6503)">📍 Tokyo</button>
                 <button class="map-button" onclick="changeLocation('Sydney', -33.8688, 151.2093)">📍 Sydney</button>
+                <button class="map-button" onclick="changeLocation('Addis Ababa', 9.0336, 38.7222)">📍Addis Ababa</button>
+                <button class="map-button" onclick="changeLocation('Kiev', 50.4501, 30.5234)">📍Kiev</button>
+                <button class="map-button" onclick="changeLocation('Gaza', 31.5017, 34.4668 )">📍Gaza</button>
+                <button class="map-button" onclick="changeLocation('Cairo', 30.0444, 31.2357)">📍Cairo</button>
             </div>
 
             <div class="map-container">
@@ -335,7 +338,7 @@
                 ></iframe>
                 <div class="map-info">
                     <p><strong>Current Location:</strong> <span id="currentLocation">Boston</span></p>
-                    <p><strong>🗺️ API Used:</strong> OpenStreetMap Embed API - Completely free, no API key required</p>
+                    <p><strong>API Used:</strong> OpenStreetMap Embed API - Completely free, no API key required</p>
                     <p><strong>Features:</strong> Beautiful maps with detailed street data, landmarks, and geographic features</p>
                 </div>
             </div>
@@ -405,6 +408,18 @@
                 <button class="art-button" onclick="fetchArt('picasso')">🎨 Picasso</button>
                 <button class="art-button" onclick="fetchArt('rembrandt')">🖼️ Rembrandt</button>
                 <button class="art-button" onclick="fetchArt('impressionism')">🎭 Impressionism</button>
+                 <button class="art-button" onclick="fetchArt('contemporary')">🎨 Contemporary Art</button>
+                <button class="art-button" onclick="fetchArt('asian')">Asian</button>
+                <button class="art-button" onclick="fetchArt('Ethiopia')">Ethiopian</button>
+                <button class="art-button" onclick="fetchArt('Christian')">Christian</button>
+                <button class="art-button" onclick="fetchArt('rembrandt')">🖼️ Rembrandt</button>
+                <button class="art-button" onclick="fetchArt('Egypt')">Egyptian</button>
+                <button class="art-button" onclick="fetchArt('Greek')">Greek</button>
+                <button class="art-button" onclick="fetchArt('Romanticism')">Romanticism</button>
+                <button class="art-button" onclick="fetchArt('Baroque')">Baroque</button>
+                <button class="art-button" onclick="fetchArt('Modernism')">Modernism</button>
+                <button class="art-button" onclick="fetchArt('Abstract')">Abstract</button>
+
             </div>
 
             <div id="artResults">
