@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products 2</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Product List</h1>
+    <button id="myBtn" onClick="btnClick()">Load Data</button>
+    
+    <div id="result"></div>
+
+    <script>
+        function btnClick() {
+            $.get('products.json', function(data) {
+                let html = "";
+                
+                // Loop through each product in the array
+                data.forEach(function(product) {
+                    html += "<div style='border-bottom: 1px solid #ccc; padding: 10px;'>";
+                    html += "<h3>" + product.name + "</h3>";
+                    html += "<p>" + product.description + "</p>";
+                    html += "<p><strong>Price: $" + product.price + "</strong></p>";
+                    html += "<p><em>Categories: " + product.categories.join(", ") + "</em></p>";
+                    html += "</div>";
+                });
+                
+                document.getElementById('result').innerHTML = html;
+            }, 'json');
+        }
+    </script>
+</body>
+</html>
