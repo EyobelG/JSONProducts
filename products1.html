@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Task 1: JSON</h1>
+    
+<script language="javascript">
+    // Create your products array with JSON objects
+    // Each product has: name, description, price, and categories (array)
+    products = [
+    {
+        "name": "1996 Synchilla Snap-T",
+        "description": "Patagonia Vintage Men's Minnehaha Flame Aztec",
+        "price": 150,
+        "categories": ["clothing", "vintage", "fleece", "Medium"]
+    },
+    {
+        "name": "Disney Tshirt",
+        "description": "Disneyland Resort Mickey Mouse Neon Sign Big Portrait Black T-Shirt",
+        "price": 17.50,
+        "categories": ["clothing", "modern", "Large"]
+    },
+    {
+        "name": "Crocs Pollex Juniper",
+        "description": "Salehe Bembury Real Tree Camo Crocs Pollex Juniper",
+        "price": 104,
+        "categories": ["sneakers", "crocs", "camo"]
+    },
+    {
+        "name": "Women's Nuptse Jacket",
+        "description": "Northface Women's 1996 Retro Nuptse Jacket Color Space",
+        "price": 330,
+        "categories": ["jacket", "north face", "winter"]
+    },
+    {
+        "name": "Men's Levis Pants",
+        "description": "Levis Skate Quick Release Pants Large Olive Green",
+        "price": 40,
+        "categories": ["pants", "green", "levis"]
+    },
+    {
+        "name": "Arcteryx Beanie",
+        "description": "Grotto Toque: Aster/Blaze",
+        "price": 40,
+        "categories": ["beanie", "toque", "arcteryx"]
+    }
+];
+
+    // Convert the JSON to a string and display it
+    strProducts = JSON.stringify(products);	
+    document.write(strProducts);
+    
+    // Also log to console so you can see it formatted
+    console.log(products);
+</script>
+</body>
+</html>

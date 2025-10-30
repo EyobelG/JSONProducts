@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Task 3: Read/Display JSON</title>
+
+
+<style type="text/css">
+    body, html {
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+    
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 24px;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+    
+    button:hover {
+        background-color: #45a049;
+    }
+    
+    #result {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .product {
+        border-bottom: 2px solid #eee;
+        padding: 15px 0;
+        margin-bottom: 15px;
+    }
+    
+    .product:last-child {
+        border-bottom: none;
+    }
+    
+    .product-name {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .product-description {
+        color: #666;
+        margin-bottom: 8px;
+    }
+    
+    .product-price {
+        color: #2ecc71;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    
+    .product-categories {
+        color: #888;
+        font-style: italic;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>Product List Display</h1>
+
+    <button onclick="loadProducts()">Load Products</button>
+    
+    <div id="result">&nbsp;</div>
+
+    <script language="javascript">
+        function loadProducts() {
+            $.get("/products.json", function(data) {
+                console.log('Loaded products:', data);
+            
+                let html = "";
+                
+                data.forEach(function(product) {
+                    html += "<div class='product'>";
+                    html += "<div class='product-name'>" + product.name + "</div>";
+                    html += "<div class='product-description'>" + product.description + "</div>";
+                    html += "<div class='product-price'>Price: $" + product.price + "</div>";
+                    html += "<div class='product-categories'>Categories: " + product.categories.join(", ") + "</div>";
+                    html += "</div>";
+                });
+                
+                // Display in the "result" div using innerHTML
+                document.getElementById('result').innerHTML = html;
+            })
+            .fail(function() {
+                document.getElementById('result').innerHTML = 
+                    "<p style='color: red;'>Error loading products.json. Make sure the file is in the same folder!</p>";
+            });
+        }
+    </script>
+</body>
+</html>
