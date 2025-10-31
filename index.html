@@ -307,7 +307,6 @@
     <div class="container">
         <h1>Maps, Memes, and Art API Explorer</h1>
 
-        <!-- MAPS SECTION -->
         <div class="section">
             <div class="section-header">
                 <span class="icon">🗺️</span>
@@ -354,7 +353,6 @@
             </div>
         </div>
 
-        <!-- MEMES SECTION -->
         <div class="section">
             <div class="section-header">
                 <span class="icon">😂</span>
@@ -385,7 +383,6 @@
             </div>
         </div>
 
-        <!-- ART SECTION -->
         <div class="section">
             <div class="section-header">
                 <span class="icon">🎨</span>
@@ -481,7 +478,7 @@
 
         function displayMemes(memes) {
             const resultsDiv = document.getElementById('memeResults');
-            // Show first 24 memes
+        
             const topMemes = memes.slice(0, 24);
             
             let html = `<h3 style="margin-bottom: 20px; color: #333; font-size: 1.5rem;">Top ${topMemes.length} Most Popular Meme Templates</h3>`;
